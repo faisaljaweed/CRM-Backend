@@ -27,19 +27,25 @@ const userSchema = new mongoose.Schema(
       index: true,
     },
 
-    avatar: {
+    // avatar: {
+    //   type: String,
+    //   required: true,
+    // },
+
+    // coverImage: {
+    //   type: String,
+    //   // required: true,
+    // },
+
+    // watchHistory: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'Video',
+    // },
+
+    role: {
       type: String,
+      enum: ['admin', 'lead', 'employee', 'client'],
       required: true,
-    },
-
-    coverImage: {
-      type: String,
-      // required: true,
-    },
-
-    watchHistory: {
-      type: Schema.Types.ObjectId,
-      ref: 'Video',
     },
 
     password: {
@@ -64,7 +70,7 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 };
 
 userSchema.methods.generateAccessToken = function () {
-  jwt.sign(
+  return jwt.sign(
     {
       _id: this._id,
       email: this.email,
@@ -79,13 +85,13 @@ userSchema.methods.generateAccessToken = function () {
 };
 
 userSchema.methods.generateRefreshToken = function () {
-  jwt.sign(
+  return jwt.sign(
     {
       _id: this._id,
     },
     process.env.REFRESH_TOKEN_SECRET,
     {
-      expiresIn: process.env.EXPIRY_REFRESH_TOKE,
+      expiresIn: process.env.EXPIRY_REFRESH_TOKEN,
     }
   );
 };
